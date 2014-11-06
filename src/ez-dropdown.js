@@ -48,7 +48,6 @@ angular.module('ez.dropdown', [])
     }
 
     if ( allowClickInside && evt && self.$element[0].contains(evt.target) ) {
-      console.log('rteet');
       return;
     }
 
