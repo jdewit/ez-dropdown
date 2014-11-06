@@ -1,0 +1,30 @@
+{
+  "name": "ez-dropdown",
+  "description": "Angular bootstrap dropdown directive",
+  "keywords": [],
+  "version": "0.0.1",
+  "author": "Joris de Wit",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "engines": {
+    "item": "0.10.x",
+    "npm": "1.2.x"
+  },
+  "scripts": {},
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-bump": "0.0.11",
+    "grunt-contrib-jshint": "*",
+    "grunt-contrib-less": "^0.12.0",
+    "grunt-contrib-uglify": "latest",
+    "grunt-karma": "^0.9.0",
+    "karma": "*",
+    "karma-chrome-launcher": "*",
+    "karma-coverage": "*",
+    "karma-jasmine": "~0.2.*",
+    "karma-phantomjs-launcher": "*",
+    "karma-script-launcher": "*"
+  }
+}

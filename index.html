@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!--dependencies start -->
+  <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/css/bootstrap.css" rel="stylesheet">
+
+  <link href="dist/ez-dropdown.min.css" rel="stylesheet"/>
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.js"></script>
+  <!--dependencies end -->
+
+  <script src="src/ez-dropdown.js"></script>
+
+  <script>
+    angular.module('myApp', ['ez.dropdown'])
+
+    .controller('AppCtrl', ['$scope', function AppCtrl($scope) {
+
+      $scope.toggled = function() {
+        console.log('toggled');
+      };
+
+    }])
+;
+
+  </script>
+</head>
+<body ng-app="myApp">
+  <div ng-controller="AppCtrl" class="container">
+    <div class="page-header">
+      <h1>ez-dropdown</h1>
+    </div>
+    <div class="page-body">
+      <span class="dropdown" on-toggle="toggled(open)">
+        <a href="#" class="dropdown-toggle">
+          Dropdown that closes on click inside!
+        </a>
+        <ul class="dropdown-menu">
+          <li><a href="#">Hey dude</a></li>
+          <li><a href="#">Hey dudette</a></li>
+        </ul>
+      </span>
+      <hr>
+      <span class="dropdown" click-inside="true">
+        <a href="#" class="dropdown-toggle">
+          Dropdown that stays open on click inside with pointer!
+        </a>
+        <ul class="dropdown-menu dropdown-pointer pull-right">
+          <li><a href="#">Hey dude</a></li>
+          <li><a href="#">Hey dudette</a></li>
+        </ul>
+      </span>
+
+    </div>
+  </div>
+</body>
+
+</html>
+
