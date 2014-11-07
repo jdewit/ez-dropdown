@@ -316,4 +316,19 @@ describe('dropdownToggle', function() {
       expect($rootScope.toggleHandler).toHaveBeenCalledWith(false);
     });
   });
+
+  describe('with dropdown menu', function() {
+    beforeEach(function() {
+      element = $compile('<li dropdown><a dropdown-toggle></a><ul class="dropdown-menu"><li>Hello</li></ul></li>')($rootScope);
+    });
+
+    it('should only render dropdown-menu when toggle is clicked', function() {
+      expect(element.find('.dropdown-menu').length).toBe(0);
+
+      clickDropdownToggle();
+
+      expect(element.find('.dropdown-menu').length).toBe(1);
+    });
+  });
+
 });

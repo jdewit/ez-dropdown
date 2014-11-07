@@ -36,6 +36,7 @@
       <span class="dropdown" on-toggle="toggled(open)">
         <a href="#" class="dropdown-toggle">
           Dropdown that closes on click inside!
+          hh{{ isOpen }}
         </a>
         <ul class="dropdown-menu">
           <li><a href="#">Hey dude</a></li>
@@ -45,7 +46,7 @@
       <hr>
       <span class="dropdown" click-inside="true">
         <a href="#" class="dropdown-toggle">
-          Dropdown that stays open on click inside with pointer!
+          Dropdown that stays open on click inside with pointer! {{ isOpen }} ??
         </a>
         <ul class="dropdown-menu dropdown-pointer pull-right">
           <li><a href="#">Hey dude</a></li>

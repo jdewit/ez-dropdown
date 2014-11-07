@@ -4,7 +4,7 @@ angular.module('ez.dropdown', [])
   openClass: 'open'
 })
 
-.controller('DropdownController', ['$scope', '$attrs', '$parse', 'dropdownConfig', '$document', '$animate', function($scope, $attrs, $parse, dropdownConfig, $document, $animate) {
+.controller('DropdownController', ['$scope', '$attrs', '$parse', '$compile', 'dropdownConfig', '$document', '$animate', function($scope, $attrs, $parse, $compile, dropdownConfig, $document, $animate) {
   var self = this,
       openScope = null,
       scope = $scope.$new(), // create a child scope so we are not polluting original one
@@ -12,7 +12,8 @@ angular.module('ez.dropdown', [])
       getIsOpen,
       setIsOpen = angular.noop,
       toggleInvoker = $attrs.onToggle ? $parse($attrs.onToggle) : angular.noop,
-      allowClickInside = $attrs.clickInside ? true : false
+      allowClickInside = $attrs.clickInside ? true : false,
+      compiled = false // has the dropdown menu been compiled?
   ;
 
 
@@ -64,8 +65,9 @@ angular.module('ez.dropdown', [])
   };
 
 
-  this.init = function( element ) {
+  this.init = function( element , dropdownMenuElement) {
     self.$element = element;
+    self.$dropdownMenuElement = dropdownMenuElement;
 
     if ( $attrs.isOpen ) {
       getIsOpen = $parse($attrs.isOpen);
@@ -97,6 +99,14 @@ angular.module('ez.dropdown', [])
   };
 
   scope.$watch('isOpen', function( isOpen, wasOpen ) {
+
+    if (isOpen && !compiled) {
+      $compile(self.$dropdownMenuElement)(scope, function(clone) {
+        self.$element.append(clone);
+      });
+      compiled = true;
+    }
+
     $animate[isOpen ? 'addClass' : 'removeClass'](self.$element, openClass);
 
     if ( isOpen ) {
@@ -125,8 +135,12 @@ angular.module('ez.dropdown', [])
   return {
     restrict: 'EAC',
     controller: 'DropdownController',
-    link: function(scope, element, attrs, dropdownCtrl) {
-      dropdownCtrl.init( element );
+    compile: function(el) {
+      var dropdownMenu = el.find('.dropdown-menu').remove();
+
+      return function(scope, element, attrs, dropdownCtrl) {
+        dropdownCtrl.init(element, dropdownMenu);
+      };
     }
   };
 })
