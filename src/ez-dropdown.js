@@ -99,11 +99,9 @@ angular.module('ez.dropdown', [])
   };
 
   scope.$watch('isOpen', function( isOpen, wasOpen ) {
-
     if (isOpen && !compiled) {
-      $compile(self.$dropdownMenuElement)(scope, function(clone) {
-        self.$element.append(clone);
-      });
+      self.$element.append(self.$dropdownMenuElement);
+      $compile(self.$dropdownMenuElement.contents())($scope);
       compiled = true;
     }
 

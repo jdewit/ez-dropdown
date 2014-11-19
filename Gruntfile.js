@@ -45,10 +45,18 @@ module.exports = function(grunt) {
           'dist/ez-dropdown.min.js': ['src/ez-dropdown.js'],
         }
       }
+    },
+    watch: {
+      dev: {
+        files: ['src/**/*'],
+        tasks: ['default']
+      }
     }
+
   });
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-contrib-less');
