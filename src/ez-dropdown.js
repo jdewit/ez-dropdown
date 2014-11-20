@@ -12,10 +12,8 @@ angular.module('ez.dropdown', [])
       getIsOpen,
       setIsOpen = angular.noop,
       toggleInvoker = $attrs.onToggle ? $parse($attrs.onToggle) : angular.noop,
-      allowClickInside = $attrs.clickInside ? true : false,
-      compiled = false // has the dropdown menu been compiled?
+      allowClickInside = $attrs.clickInside ? true : false
   ;
-
 
   this.open = function( dropdownScope ) {
     if ( !openScope ) {
@@ -65,7 +63,7 @@ angular.module('ez.dropdown', [])
   };
 
 
-  this.init = function( element , dropdownMenuElement) {
+  this.init = function(element , dropdownMenuElement) {
     self.$element = element;
     self.$dropdownMenuElement = dropdownMenuElement;
 
@@ -99,10 +97,9 @@ angular.module('ez.dropdown', [])
   };
 
   scope.$watch('isOpen', function( isOpen, wasOpen ) {
-    if (isOpen && !compiled) {
-      self.$element.append(self.$dropdownMenuElement);
-      $compile(self.$dropdownMenuElement.contents())($scope);
-      compiled = true;
+
+    if (isOpen) {
+      self.$element.append($compile(self.$dropdownMenuElement)(scope));
     }
 
     $animate[isOpen ? 'addClass' : 'removeClass'](self.$element, openClass);
@@ -125,6 +122,7 @@ angular.module('ez.dropdown', [])
   });
 
   $scope.$on('$destroy', function() {
+    console.log('deest');
     scope.$destroy();
   });
 }])
