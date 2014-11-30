@@ -7,7 +7,6 @@ module.exports = function(grunt) {
       options: {
         files: ['package.json', 'bower.json'],
         updateConfigs: [],
-        commit: false,
         push: false,
         commitMessage: 'Release v%VERSION%',
         commitFiles: ['package.json', 'bower.json']
@@ -33,12 +32,6 @@ module.exports = function(grunt) {
         },
       }
     },
-    karma: {
-      singleRun: {
-        configFile: 'karma.conf.js',
-        singleRun: true
-      }
-    },
     uglify: {
       dist: {
         files: {
@@ -58,12 +51,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-bump');
 
   grunt.registerTask('default', ['jshint', 'uglify', 'less']);
-
-  grunt.registerTask('test', ['karma:singleRun']);
 
 };

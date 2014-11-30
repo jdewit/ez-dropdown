@@ -1,58 +1,84 @@
 angular.module('ez.dropdown', [])
-
 .directive('dropdown', ['$document', '$compile', function($document, $compile) {
   return {
     restrict: 'C',
-    compile: function(el, attrs) {
-      var isRendered = false;
+    controller: function($scope) {
       var isShown = false;
-      var dropdownEl = el;
-      var dropdownToggleEl = angular.element(el[0].children[0]);
-      var dropdownMenuEl = dropdownToggleEl.next().remove();
-      var onToggle = typeof attrs.onToggle === 'function' ? attrs.onToggle : angular.noop;
+      var isCompiled = false;
+      var $dropdownEl;
+      var $dropdownMenuEl;
+      var toggleFn;
+      var allowClickInside;
 
-      return function(scope) {
-        var toggleMenu = function() {
-          if (!isRendered) {
-            dropdownEl.append($compile(dropdownMenuEl)(scope));
-            isRendered = true;
+      var toggleMenu = function(e) {
+        if (allowClickInside && $dropdownMenuEl[0].contains(e.target)) {
+          return;
+        }
+
+        if (isShown) {
+          $document.off('click', toggleMenu);
+
+          $dropdownEl.removeClass('open');
+        } else {
+          if (!isCompiled) {
+            isCompiled = true;
+
+            // must clone content so it does not get overwritten
+            $compile($dropdownMenuEl.clone())($scope, function(clone) {
+              $dropdownEl.append(clone);
+            });
           }
 
-          if (isShown) {
-            $document.off('click', documentClickHandler);
-
-            dropdownEl.removeClass('open');
-          } else {
-            $document.on('click', documentClickHandler);
-
-            dropdownEl.addClass('open');
-          }
-
-          isShown = !isShown;
-
-          scope.$apply(function() {
-            scope.$eval(attrs.onToggle)(isShown);
+          // allow first click to happen
+          setTimeout(function() {
+            $document.on('click', toggleMenu);
           });
-        };
 
-        var documentClickHandler = function(e) {
-          if ( attrs.hasOwnProperty('clickInside') && dropdownMenuEl[0].contains(e.target) ) {
-            return;
-          }
+          $dropdownEl.addClass('open');
+        }
 
-          toggleMenu();
-        };
+        isShown = !isShown;
 
-        var dropdownToggleClickHandler = function(e) {
-          e.preventDefault();
-          e.stopPropagation();
+        if (typeof toggleFn === 'function') {
+          toggleFn(isShown);
+        }
 
-          toggleMenu();
-        };
-
-
-        dropdownToggleEl.bind('click', dropdownToggleClickHandler);
+        $scope.$apply();
       };
+
+      this.toggleMenu = toggleMenu;
+
+      this.init = function(el, dropdownMenuEl, attrs) {
+        $dropdownEl = el;
+        $dropdownMenuEl = dropdownMenuEl;
+        toggleFn = attrs.onToggle !== null ? $scope.$eval(attrs.onToggle) : null;
+        allowClickInside = attrs.hasOwnProperty('clickInside');
+      };
+
+      $scope.$on('$destroy', function() {
+        $document.off('click', toggleMenu);
+        $dropdownEl = $dropdownMenuEl = null;
+      });
+    },
+    compile: function(el, attrs) {
+      var $dropdownMenuEl = el.find('.dropdown-menu').remove();
+
+      return function(scope, el, attrs, ctrl) {
+        ctrl.init(el, $dropdownMenuEl, attrs);
+      };
+    }
+  };
+}])
+.directive('dropdownToggle', ['$document', '$compile', function($document, $compile) {
+  return {
+    restrict: 'C',
+    require: '^dropdown',
+    link: function(scope, el, attrs, ctrl) {
+      el.on('click', ctrl.toggleMenu);
+
+      scope.$on('$destroy', function() {
+        el.off('click', ctrl.toggle);
+      });
     }
   };
 }]);

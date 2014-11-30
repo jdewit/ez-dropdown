@@ -18,8 +18,21 @@
 
     .controller('AppCtrl', ['$scope', function AppCtrl($scope) {
 
+      $scope.items = [
+        {
+          name: 'First Item',
+          links: ['1A', '1B']
+        }, {
+          name: 'Second Item',
+          links: ['2A', '2B']
+        }, {
+          name: 'Third Item',
+          links: ['3A', '3B']
+        }
+      ];
+
       $scope.toggled = function(open) {
-        $scope.msgs.push('toggled - ' + open);
+        $scope.msgs.push('call on-toggle => ' + open);
       };
 
       $scope.msgs = [];
@@ -58,6 +71,33 @@
         </ul>
       </span>
 
+      <hr>
+
+      <div class="dropdown" click-inside="true" style="width: 400px;">
+        <div>
+          <label class="control-label">Input Toggle</label>
+          <input type="text" class="form-control dropdown-toggle"/>
+        </div>
+        <ul class="dropdown-menu dropdown-pointer pull-right">
+          <li><a ng-click="log('hey dude')">Hey dude</a></li>
+          <li><a ng-click="log('hey dudette')">Hey dudette</a></li>
+        </ul>
+      </div>
+
+      <hr>
+
+      <p>Inside ng-repeat</p>
+
+      <ul ng-repeat="item in items">
+        <li class="dropdown">
+          <a class="dropdown-toggle">
+            {{ item.name }} <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <li ng-repeat="link in item.links"><a ng-click="log(link)">{{ link }}</a></li>
+          </ul>
+        </li>
+      </ul>
       <hr>
 
       <ul ng-repeat="msg in msgs track by $index">

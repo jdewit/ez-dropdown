@@ -19,12 +19,6 @@
     "grunt-contrib-jshint": "*",
     "grunt-contrib-less": "^0.12.0",
     "grunt-contrib-uglify": "latest",
-    "grunt-karma": "^0.9.0",
-    "karma": "*",
-    "karma-chrome-launcher": "*",
-    "karma-coverage": "*",
-    "karma-jasmine": "~0.2.*",
-    "karma-phantomjs-launcher": "*",
-    "karma-script-launcher": "*"
+    "grunt-contrib-watch": "^0.6.1"
   }
 }
