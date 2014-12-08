@@ -7,9 +7,10 @@ angular.module('ez.dropdown', [])
   var $dropdownMenuEl;
   var toggleFn;
   var allowClickInside;
+  var cloneEl;
 
   var toggleMenu = function(e) {
-    if (allowClickInside && $dropdownMenuEl[0].contains(e.target)) {
+    if (allowClickInside && !!cloneEl && cloneEl.contains(e.target) && e.target.getAttribute('ng-click') !== 'toggleMenu()') {
       return;
     }
 
@@ -22,7 +23,8 @@ angular.module('ez.dropdown', [])
         isCompiled = true;
 
         // must clone content so it does not get overwritten
-        $compile($dropdownMenuEl.clone())($scope, function(clone) {
+        $compile($dropdownMenuEl)($scope, function(clone) {
+          cloneEl = clone[0];
           $dropdownEl.append(clone);
         });
       }
@@ -48,7 +50,7 @@ angular.module('ez.dropdown', [])
 
   this.init = function(el, dropdownMenuEl, attrs) {
     $dropdownEl = el;
-    $dropdownMenuEl = dropdownMenuEl;
+    $dropdownMenuEl = dropdownMenuEl.clone();
     toggleFn = attrs.onToggle !== null ? $scope.$eval(attrs.onToggle) : null;
     allowClickInside = attrs.hasOwnProperty('clickInside');
   };

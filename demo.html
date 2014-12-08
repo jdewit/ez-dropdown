@@ -98,7 +98,21 @@
           </ul>
         </li>
       </ul>
+
       <hr>
+
+      <div class="dropdown" click-inside="true">
+        <a class="dropdown-toggle">Dropdown with custom close</a>
+
+        <div class="dropdown-menu" style="padding: 10px;">
+          <input type="text" class="form-control"/>
+          <hr>
+          <a ng-click="toggleMenu()" class="btn btn-primary">Save</a>
+        </div>
+      </div>
+
+      <hr>
+
 
       <ul ng-repeat="msg in msgs track by $index">
         <li>{{ msg }}</li>
