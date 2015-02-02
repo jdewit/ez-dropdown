@@ -6,11 +6,12 @@ angular.module('ez.dropdown', [])
   var $dropdownEl;
   var $dropdownMenuEl;
   var toggleFn;
+  var isDisabled = false;
   var allowClickInside;
   var cloneEl;
 
   var toggleMenu = function(e, noDigest) {
-    if (allowClickInside && !!cloneEl && !!e && cloneEl.contains(e.target) && e.target.getAttribute('ng-click') !== 'toggleMenu()') {
+    if (isDisabled || allowClickInside && !!cloneEl && !!e && cloneEl.contains(e.target) && e.target.getAttribute('ng-click') !== 'toggleMenu()') {
       return;
     }
 
@@ -57,9 +58,19 @@ angular.module('ez.dropdown', [])
     allowClickInside = attrs.hasOwnProperty('clickInside');
 
     if (!!attrs.isOpen) {
-      $scope.$watch(attrs.isOpen, function(newVal) {
-        if (!!newVal) {
+      $scope.$watch(attrs.isOpen, function(newVal, oldVal) {
+        if (newVal === oldVal) {
+         return;
+        }
+
+        if (newVal !== isShown) {
           toggleMenu(null, true);
+          isDisabled = true;
+
+          // disable click from re-toggling dropdown
+          setTimeout(function() {
+            isDisabled = false;
+          }, 100);
         }
       });
     }

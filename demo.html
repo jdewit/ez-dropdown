@@ -44,6 +44,10 @@
 
       $scope.dropdownEnabled = true;
 
+      $scope.toggled = function(isOpen) {
+        $scope.openDropdown = isOpen;
+      };
+
     }])
 ;
 
@@ -118,8 +122,10 @@
       <hr>
 
       <a class="btn btn-primary" ng-click="openDropdown = !openDropdown">Open a dropdown with a random button</a>
-      <input type="checkbox" ng-model="dropdownEnabled"> Enabled
-      <div class="dropdown" is-open="openDropdown && dropdownEnabled">
+      <br>
+      <input type="checkbox" ng-model="dropdownEnabled"> Enabled <br>
+      is dropdown open? => {{ !!openDropdown }}
+      <div class="dropdown" is-open="openDropdown && dropdownEnabled" on-toggle="toggled">
         <ul class="dropdown-menu">
           <li><a ng-click="log('hey dude')">Hey dude</a></li>
           <li><a ng-click="log('hey dudette')">Hey dudette</a></li>
