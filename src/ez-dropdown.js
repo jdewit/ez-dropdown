@@ -56,8 +56,8 @@ angular.module('ez.dropdown', [])
     toggleFn = attrs.onToggle !== null ? $scope.$eval(attrs.onToggle) : null;
     allowClickInside = attrs.hasOwnProperty('clickInside');
 
-    if (!!attrs.open) {
-      $scope.$watch(attrs.open, function(newVal) {
+    if (!!attrs.isOpen) {
+      $scope.$watch(attrs.isOpen, function(newVal) {
         if (!!newVal) {
           toggleMenu(null, true);
         }
