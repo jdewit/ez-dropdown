@@ -2,7 +2,7 @@
   "name": "ez-dropdown",
   "description": "Angular bootstrap dropdown directive",
   "keywords": [],
-  "version": "0.0.8",
+  "version": "0.0.9",
   "author": "Joris de Wit",
   "repository": {
     "type": "git",
