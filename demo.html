@@ -37,16 +37,14 @@
 
       $scope.msgs = [];
 
-      $scope.dropdownEnabled = true;
+      $scope.inputDropdown = false;
       $scope.log = function(msg) {
+        console.log(msg);
         $scope.msgs.push(msg);
+        $scope.inputDropdown = false;
       };
 
       $scope.dropdownEnabled = true;
-
-      $scope.toggled = function(isOpen) {
-        $scope.openDropdown = isOpen;
-      };
 
     }])
 ;
@@ -81,14 +79,14 @@
 
       <hr>
 
-      <div class="dropdown" click-inside="true" style="width: 400px;">
+      <div class="dropdown" style="width: 400px;" is-open="inputDropdown">
         <div>
           <label class="control-label">Input Toggle</label>
-          <input type="text" class="form-control dropdown-toggle"/>
+          <input readonly="true" type="text" ng-model="iText" class="form-control dropdown-toggle"/>
         </div>
         <ul class="dropdown-menu dropdown-pointer pull-right">
-          <li><a ng-click="log('hey dude')">Hey dude</a></li>
-          <li><a ng-click="log('hey dudette')">Hey dudette</a></li>
+          <li><a ng-click="iText = 'hey dude'">Hey dude</a></li>
+          <li><a ng-click="iText = 'hey dudette'">Hey dudette</a></li>
         </ul>
       </div>
 
@@ -109,13 +107,13 @@
 
       <hr>
 
-      <div class="dropdown" click-inside="true">
-        <a class="dropdown-toggle">Dropdown with custom close</a>
+      <div class="dropdown" is-open="foo" click-inside="true">
+        <a class="dropdown-toggle">Dropdown with click inside & custom close</a>
 
         <div class="dropdown-menu" style="padding: 10px;">
           <input type="text" class="form-control"/>
           <hr>
-          <a ng-click="toggleMenu()" class="btn btn-primary">Save</a>
+          <a ng-click="foo = !foo" class="btn btn-primary">Save</a>
         </div>
       </div>
 
@@ -123,9 +121,8 @@
 
       <a class="btn btn-primary" ng-click="openDropdown = !openDropdown">Open a dropdown with a random button</a>
       <br>
-      <input type="checkbox" ng-model="dropdownEnabled"> Enabled <br>
-      is dropdown open? => {{ !!openDropdown }}
-      <div class="dropdown" is-open="openDropdown && dropdownEnabled" on-toggle="toggled">
+
+      <div class="dropdown" is-open="openDropdown">
         <ul class="dropdown-menu">
           <li><a ng-click="log('hey dude')">Hey dude</a></li>
           <li><a ng-click="log('hey dudette')">Hey dudette</a></li>
@@ -134,6 +131,7 @@
 
       <hr>
 
+      <h4>Log</h4>
       <ul ng-repeat="msg in msgs track by $index">
         <li>{{ msg }}</li>
       </ul>
