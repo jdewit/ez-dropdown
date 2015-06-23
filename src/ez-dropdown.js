@@ -32,7 +32,7 @@ angular.module('ez.dropdown', [])
       });
     }
 
-    if (!$attrs.mobileDisabled) {
+    if (!$attrs.mobileDisabled && !$dropdownEl.hasClass('dropdown-mobile')) {
       var w = $(window).width();
       if (w < 768) {
 
@@ -47,11 +47,19 @@ angular.module('ez.dropdown', [])
           } else {
             $cloneEl.css('top', (h - menuHeight) / 2);
           }
-        });
 
-        if (!!$dropdownEl.hasClass('dropdown-select')) {
-          $dropdownEl.find('li').append('<input type="radio"/>');
-        }
+          if (!!$dropdownEl.hasClass('dropdown-select')) {
+            $dropdownEl.find('li').each(function() {
+              if (!$(this).hasClass('dropdown-header')) {
+                if ($(this).hasClass('active')) {
+                  $(this).append('<input type="radio" checked="checked"/>');
+                } else {
+                  $(this).append('<input type="radio"/>');
+                }
+              }
+            });
+          }
+        });
 
         if (!$attrs.noBackdrop) {
           $backdropEl = angular.element('<div class="modal-backdrop in"></div>');
@@ -60,7 +68,7 @@ angular.module('ez.dropdown', [])
         }
 
         $dropdownEl.addClass('dropdown-mobile');
-        $dropdownEl.children(0).width(w - 40);
+        $cloneEl.width(w - 40);
       } else {
         $dropdownEl.removeClass('dropdown-mobile');
       }
@@ -115,6 +123,10 @@ angular.module('ez.dropdown', [])
   };
 
   $scope.$on('$destroy', function() {
+    if (!!$backdropEl) {
+      $backdropEl.remove();
+    }
+
     $dropdownEl = $dropdownMenuEl = $cloneEl = cloneEl = $backdropEl = null;
   });
 }])
