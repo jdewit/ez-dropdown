@@ -2,6 +2,7 @@
 <html>
 
 <head>
+  <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <!--dependencies start -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
 
@@ -52,22 +53,41 @@
   </script>
 </head>
 <body ng-app="myApp">
-  <div ng-controller="AppCtrl" class="container">
+  <div ng-controller="AppCtrl" class="container-fluid">
     <div class="page-header">
       <h1>ez-dropdown</h1>
     </div>
     <div class="page-body">
-      <span class="dropdown" on-toggle="toggled">
+      <span class="dropdown dropdown-select" on-toggle="toggled">
         <a class="dropdown-toggle">
           Dropdown that closes on click inside!
         </a>
         <ul class="dropdown-menu">
           <li><a ng-click="log('hey dude')">Hey dude</a></li>
           <li><a ng-click="log('hey dudette')">Hey dudette</a></li>
+          <li><a ng-click="log('hey dudette')">Hey dudette</a></li>
+          <li><a ng-click="log('hey dudette')">Hey dudette</a></li>
+          <li><a ng-click="log('hey dudette')">Hey dudette</a></li>
+          <li><a ng-click="log('hey dudette')">Hey dudette</a></li>
+          <li><a ng-click="log('hey dudette')">Hey dudette</a></li>
+          <li><a ng-click="log('hey dudette')">Hey dudette</a></li>
+          <li><a ng-click="log('hey dudette')">Hey dudette</a></li>
+          <li><a ng-click="log('hey dudette')">Hey dudette</a></li>
+          <li><a ng-click="log('hey dudette')">Hey dudette</a></li>
+          <li><a ng-click="log('hey dudette')">Hey dudette</a></li>
+          <li><a ng-click="log('hey dudette')">Hey dudette</a></li>
+          <li><a ng-click="log('hey dudette')">Hey dudette</a></li>
+          <li><a ng-click="log('hey dudette')">Hey dudette</a></li>
+          <li><a ng-click="log('hey dudette')">Hey dudette</a></li>
+          <li><a ng-click="log('hey dudette')">Hey dudette</a></li>
+          <li><a ng-click="log('hey dudette')">Hey dudette</a></li>
+          <li><a ng-click="log('hey dudette')">Hey dudette</a></li>
+          <li><a ng-click="log('hey dudette')">Hey dudette</a></li>
+          <li><a ng-click="log('hey dudette')">Hey dudette</a></li>
         </ul>
       </span>
       <hr>
-      <span class="dropdown" click-inside="true">
+      <span class="dropdown" click-inside="true" no-backdrop="true" mobile-disabled="true">
         <a class="dropdown-toggle">
           Dropdown that stays open on click inside with pointer!??
         </a>

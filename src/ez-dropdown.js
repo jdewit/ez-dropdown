@@ -4,7 +4,10 @@ angular.module('ez.dropdown', [])
   var isCompiled = false;
   var $dropdownEl;
   var $dropdownMenuEl;
+  var $cloneEl;
   var cloneEl;
+  var $backdropEl;
+  var $attrs;
 
   var hideFn = function(e) {
     if (!!e && !!$scope.clickInside && !!cloneEl && cloneEl.contains(e.target)) {
@@ -23,21 +26,56 @@ angular.module('ez.dropdown', [])
 
       // must clone content so it does not get overwritten
       $compile($dropdownMenuEl)($scope.$parent, function(clone) {
+        $cloneEl = clone;
         cloneEl = clone[0];
         $dropdownEl.append(clone);
       });
     }
 
-    // allow first click to happen
-    setTimeout(function() {
-      $document.one('click', hideFn);
-    });
+    if (!$attrs.mobileDisabled) {
+      var w = $(window).width();
+      if (w < 768) {
+
+        // allow menu heigh to take effect
+        setTimeout(function() {
+          var h = $(window).height();
+          var menuHeight = $cloneEl.outerHeight();
+
+          if (menuHeight > h) {
+            $cloneEl.css('top', 10);
+            $cloneEl.css('height', h - 20);
+          } else {
+            $cloneEl.css('top', (h - menuHeight) / 2);
+          }
+        });
+
+        if (!!$dropdownEl.hasClass('dropdown-select')) {
+          $dropdownEl.find('li').append('<input type="radio"/>');
+        }
+
+        if (!$attrs.noBackdrop) {
+          $backdropEl = angular.element('<div class="modal-backdrop in"></div>');
+          $('body').append($backdropEl);
+          $backdropEl.height($('body').height());
+        }
+
+        $dropdownEl.addClass('dropdown-mobile');
+        $dropdownEl.children(0).width(w - 40);
+      } else {
+        $dropdownEl.removeClass('dropdown-mobile');
+      }
+    }
 
     $dropdownEl.addClass('open');
 
     if (typeof $scope.onToggle === 'function') {
       $scope.onToggle(true);
     }
+
+    // apply hide fn on next click
+    setTimeout(function() {
+      $document.one('click', hideFn);
+    });
   };
 
   var hide = function() {
@@ -47,12 +85,17 @@ angular.module('ez.dropdown', [])
       $scope.onToggle(false);
     }
 
+    if (!!$backdropEl) {
+      $backdropEl.remove();
+    }
+
     $document.off('click', hideFn);
   };
 
-  this.init = function(el, dropdownMenuEl) {
+  this.init = function(el, dropdownMenuEl, attrs) {
     $dropdownEl = el;
     $dropdownMenuEl = dropdownMenuEl.clone();
+    $attrs = attrs;
 
     $scope.$watch('isOpen', function(newVal, oldVal) {
       if (newVal === oldVal) {
@@ -72,7 +115,7 @@ angular.module('ez.dropdown', [])
   };
 
   $scope.$on('$destroy', function() {
-    $dropdownEl = $dropdownMenuEl = cloneEl = null;
+    $dropdownEl = $dropdownMenuEl = $cloneEl = cloneEl = $backdropEl = null;
   });
 }])
 
@@ -89,7 +132,7 @@ angular.module('ez.dropdown', [])
       var $dropdownMenuEl = el.find('.dropdown-menu').remove();
 
       return function(scope, el, attrs, ctrl) {
-        ctrl.init(el, $dropdownMenuEl);
+        ctrl.init(el, $dropdownMenuEl, attrs);
       };
     }
   };

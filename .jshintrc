@@ -43,6 +43,7 @@
         "repeater": true,
         "describe": true,
         "angular": true,
-        "jasmine": true
+        "jasmine": true,
+        "window": true
     }
 }

@@ -3,10 +3,9 @@ EZ-DROPDOWN
 
 This is a fork of the <a href="https://github.com/angular-ui/bootstrap">angular-ui bootstrap dropdown</a>. 
 
-The angular-ui-bootstrap project is too complicated. I think it would be better suited to split all of the components into individual repos. 
-
-
 One big difference with this directive is that the dropdown menu is not compiled until the dropdown toggle is clicked. This improves performance if you have dropdowns inside a big fat ng-repeat.
+
+On small screen sizes (<768px) the dropdown transforms into a full screen modal.
 
 ###Demo
 
@@ -31,7 +30,6 @@ angular.module('yourApp', ['ez.dropdown'])
 
 ###Usage
 
-default
 ```html
  <span class="dropdown">
    <a class="dropdown-toggle">Dropdown that closes on click</a>
@@ -41,29 +39,25 @@ default
  </span>
 ```
 
-call function on toggle with ```on-toggle``` attribute
-```html
- <span class="dropdown" on-toggle="toggled">
-   <a class="dropdown-toggle">Dropdown that calls toggled function on toggle</a>
-   <ul class="dropdown-menu">
-     <li><a href="#">Yo</a></li>
-   </ul>
- </span>
-```
+###Config Attributes
 
-prevent auto closing on click inside with ```click-inside``` attribute
-```html
- <span class="dropdown" click-inside="true">
-   <a class="dropdown-toggle">Dropdown that stays open on click inside!</a>
-   <ul class="dropdown-menu pull-right">
-     <li><a href="#">Hey dude</a></li>
-   </ul>
- </span>
+Add the following attributes to the 'dropdown' element for custom behaviour:
 
-```
+- ```on-toggle="someFn"``` call a function
 
-###Pointer Arrow
-Include the ```dist/ez-dropdown.min.css``` stylesheet to add the pointer arrow to your dropdown. 
+- ```click-inside="true"``` prevent auto closing dropdown on click inside dropdown menu
 
-Add the ```dropdown-pointer``` class to the dropdown-menu element for it to take effect. 
+- ```no-backdrop="true"``` prevent backdrop from appearing in mobile mode
+
+- ```mobile-disabled="true"``` disable mobile mode
+
+###Helper Classes
+
+Add the following classes to the 'dropdown' element for custom styling
+
+- ```class="dropdown dropdown-select"``` show radio inputs beside options in mobile mode with border on the bottom
+
+Add the following classes to the 'dropdown-menu element for custom styling
+
+- ```class="dropdown-menu dropdown-pointer"``` show a pointer arrow on the top of the dropdown menu
 
