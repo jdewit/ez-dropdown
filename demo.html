@@ -144,12 +144,35 @@
 
       <div class="dropdown" is-open="openDropdown">
         <ul class="dropdown-menu">
+          <li>
+            <a ng-click="log('hey dude')">Hey dude</a>
+            <a class="pull-right">
+              <i class="glyphicon glyphicon-trash"></i>
+            </a>
+          </li>
+          <li>
+            <a ng-click="log('hey dudette')">Hey dudette</a>
+            <a class="pull-right">
+              <i class="glyphicon glyphicon-trash"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <hr>
+
+      <br>
+
+      <div class="dropdown dropdown-absolute">
+        <a class="dropdown-toggle">Absolute Dropdown</a>
+        <ul class="dropdown-menu">
           <li><a ng-click="log('hey dude')">Hey dude</a></li>
           <li><a ng-click="log('hey dudette')">Hey dudette</a></li>
         </ul>
       </div>
 
       <hr>
+
 
       <h4>Log</h4>
       <ul ng-repeat="msg in msgs track by $index">
