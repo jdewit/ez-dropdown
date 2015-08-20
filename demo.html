@@ -58,11 +58,11 @@
       <h1>ez-dropdown</h1>
     </div>
     <div class="page-body">
-      <span class="dropdown dropdown-select" on-toggle="toggled">
-        <a class="dropdown-toggle">
+      <span dropdown select="true" on-toggle="toggled">
+        <a dropdown-toggle>
           Dropdown that closes on click inside!
         </a>
-        <ul class="dropdown-menu">
+        <ul>
           <li><a ng-click="log('hey dude')">Hey dude</a></li>
           <li><a ng-click="log('hey dudette')">Hey dudette</a></li>
           <li><a ng-click="log('hey dudette')">Hey dudette</a></li>
@@ -87,11 +87,11 @@
         </ul>
       </span>
       <hr>
-      <span class="dropdown" click-inside="true" no-backdrop="true" mobile-disabled="true">
-        <a class="dropdown-toggle">
+      <span dropdown click-inside="true" no-backdrop="true" mobile-disabled="true">
+        <a dropdown-toggle>
           Dropdown that stays open on click inside with pointer!??
         </a>
-        <ul class="dropdown-menu dropdown-pointer pull-right">
+        <ul class="dropdown-pointer pull-right">
           <li><a ng-click="log('hey dude')">Hey dude</a></li>
           <li><a ng-click="log('hey dudette')">Hey dudette</a></li>
         </ul>
@@ -99,12 +99,12 @@
 
       <hr>
 
-      <div class="dropdown" style="width: 400px;" is-open="inputDropdown">
-        <div>
+      <div dropdown style="width: 400px;" is-open="inputDropdown">
+        <div dropdown-toggle>
           <label class="control-label">Input Toggle</label>
-          <input readonly="true" type="text" ng-model="iText" class="form-control dropdown-toggle"/>
+          <input readonly="true" type="text" ng-model="iText" class="form-control"/>
         </div>
-        <ul class="dropdown-menu dropdown-pointer pull-right">
+        <ul class="dropdown-pointer pull-right">
           <li><a ng-click="iText = 'hey dude'">Hey dude</a></li>
           <li><a ng-click="iText = 'hey dudette'">Hey dudette</a></li>
         </ul>
@@ -114,23 +114,24 @@
 
       <p>Inside ng-repeat</p>
 
-      <ul ng-repeat="item in items">
-        <li class="dropdown">
-          <a class="dropdown-toggle">
-            {{ item.name }} <span class="caret"></span>
-          </a>
-          <ul class="dropdown-menu">
-            <li ng-repeat="link in item.links"><a ng-click="log(link)">{{ link }}</a></li>
-          </ul>
+      <ul>
+        <li ng-repeat="item in items">
+          <div dropdown>
+            <a dropdown-toggle>
+              {{ item.name }} <span class="caret"></span>
+            </a>
+            <ul>
+              <li ng-repeat="link in item.links"><a ng-click="log(link)">{{ link }}</a></li>
+            </ul>
+          </div>
         </li>
       </ul>
 
       <hr>
 
-      <div class="dropdown" is-open="foo" click-inside="true">
-        <a class="dropdown-toggle">Dropdown with click inside & custom close</a>
-
-        <div class="dropdown-menu" style="padding: 10px;">
+      <div dropdown is-open="foo" click-inside="true">
+        <a dropdown-toggle>Dropdown with click inside & custom close</a>
+        <div style="padding: 10px;">
           <input type="text" class="form-control"/>
           <hr>
           <a ng-click="foo = !foo" class="btn btn-primary">Save</a>
@@ -142,8 +143,8 @@
       <a class="btn btn-primary" ng-click="openDropdown = !openDropdown">Open a dropdown with a random button</a>
       <br>
 
-      <div class="dropdown" is-open="openDropdown">
-        <ul class="dropdown-menu">
+      <div dropdown is-open="openDropdown" class="dropup">
+        <ul>
           <li>
             <a ng-click="log('hey dude')">Hey dude</a>
             <a class="pull-right">
@@ -163,9 +164,9 @@
 
       <br>
 
-      <div class="dropdown dropdown-absolute">
-        <a class="dropdown-toggle">Absolute Dropdown</a>
-        <ul class="dropdown-menu">
+      <div dropdown absolute="true">
+        <a dropdown-toggle>Absolute Dropdown (moves dropdown to body tag)</a>
+        <ul>
           <li><a ng-click="log('hey dude')">Hey dude</a></li>
           <li><a ng-click="log('hey dudette')">Hey dudette</a></li>
         </ul>
@@ -173,12 +174,10 @@
 
       <hr>
 
-
       <h4>Log</h4>
       <ul ng-repeat="msg in msgs track by $index">
         <li>{{ msg }}</li>
       </ul>
-
 
     </div>
   </div>

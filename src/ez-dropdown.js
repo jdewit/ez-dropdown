@@ -1,6 +1,7 @@
 angular.module('ez.dropdown', [])
 
-.controller('DropdownCtrl', ['$scope', '$document', '$compile', function($scope, $document, $compile) {
+.controller('EzDropdownCtrl', ['$scope', '$document', '$compile', function($scope, $document, $compile) {
+  var $window = $(window);
   var isCompiled = false;
   var $dropdownEl;
   var $dropdownMenuEl;
@@ -8,6 +9,7 @@ angular.module('ez.dropdown', [])
   var cloneEl;
   var $backdropEl;
   var $attrs;
+  var self = this;
 
   var hideFn = function(e) {
     if (!!e && !!$scope.clickInside && !!cloneEl && cloneEl.contains(e.target)) {
@@ -20,7 +22,9 @@ angular.module('ez.dropdown', [])
     }
   };
 
-  var show = function() {
+  this.show = function() {
+    var windowWidth = $(window).width();
+
     if (!isCompiled) {
       isCompiled = true;
 
@@ -28,13 +32,20 @@ angular.module('ez.dropdown', [])
       $compile($dropdownMenuEl)($scope.$parent, function(clone) {
         $cloneEl = clone;
         cloneEl = clone[0];
-        $dropdownEl.append(clone);
+
+        if ($attrs.absolute) {
+          $dropdownEl = angular.element('<span class="dropdown dropdown-absolute"></span>');
+          $dropdownEl.append($cloneEl);
+
+          $('body').append($dropdownEl);
+        } else {
+          $dropdownEl.append($cloneEl);
+        }
       });
     }
 
     if (!$attrs.mobileDisabled && !$dropdownEl.hasClass('dropdown-mobile')) {
-      var w = $(window).width();
-      if (w < 768) {
+      if (windowWidth < 768) {
 
         // allow menu heigh to take effect
         setTimeout(function() {
@@ -47,18 +58,6 @@ angular.module('ez.dropdown', [])
           } else {
             $cloneEl.css('top', (h - menuHeight) / 2);
           }
-
-          if (!!$dropdownEl.hasClass('dropdown-select')) {
-            $dropdownEl.find('li').each(function() {
-              if (!$(this).hasClass('dropdown-header')) {
-                if ($(this).hasClass('active')) {
-                  $(this).append('<input type="radio" checked="checked"/>');
-                } else {
-                  $(this).append('<input type="radio"/>');
-                }
-              }
-            });
-          }
         });
 
         if (!$attrs.noBackdrop) {
@@ -68,10 +67,27 @@ angular.module('ez.dropdown', [])
         }
 
         $dropdownEl.addClass('dropdown-mobile');
-        $cloneEl.width(w - 40);
-      } else {
-        $dropdownEl.removeClass('dropdown-mobile');
+        $cloneEl.width(windowWidth - 40);
       }
+    }
+
+    if (!!$attrs.absolute && $scope.clickEvent) {
+      var top = $scope.clickEvent.clientY + $(document).scrollTop();
+      var left;
+      var menuWidth = $cloneEl.width();
+
+      if (($scope.clickEvent.clientX + menuWidth) > windowWidth) {
+        left = $scope.clickEvent.clientX - menuWidth;
+      } else {
+        left = $scope.clickEvent.clientX;
+      }
+
+      $dropdownEl.css({
+        top: top + 'px',
+        left: left + 'px'
+      });
+
+      $scope.clickEvent = null;
     }
 
     $dropdownEl.addClass('open');
@@ -86,8 +102,18 @@ angular.module('ez.dropdown', [])
     });
   };
 
-  var hide = function() {
+  this.hide = function() {
     $dropdownEl.removeClass('open');
+
+    if ($dropdownEl.hasClass('dropdown-mobile')) {
+      $dropdownEl.removeClass('dropdown-mobile');
+
+      $cloneEl.css({
+        top: 'auto',
+        left: 0,
+        width: 'auto'
+      });
+    }
 
     if (typeof $scope.onToggle === 'function') {
       $scope.onToggle(false);
@@ -100,31 +126,36 @@ angular.module('ez.dropdown', [])
     $document.off('click', hideFn);
   };
 
+  this.toggle = function(e) {
+    $scope.clickEvent = e;
+    $scope.isOpen = !$scope.isOpen;
+  };
+
   this.init = function(el, dropdownMenuEl, attrs) {
     $dropdownEl = el;
     $dropdownMenuEl = dropdownMenuEl.clone();
     $attrs = attrs;
 
-    $scope.$watch('isOpen', function(newVal, oldVal) {
-      if (newVal === oldVal) {
-       return;
-      }
+    $scope.toggleFn = this.toggle;
+  };
 
-      if (!!newVal) {
-        show();
+  $scope.$watch('isOpen', function(n, o) {
+    if (n !== 0) {
+      if (!!n) {
+        self.show();
       } else {
-        hide();
+        self.hide();
       }
-    });
-  };
-
-  this.toggle = function() {
-    $scope.isOpen = !$scope.isOpen;
-  };
+    }
+  });
 
   $scope.$on('$destroy', function() {
     if (!!$backdropEl) {
       $backdropEl.remove();
+    }
+
+    if ($attrs.absolute) {
+      $dropdownEl.remove();
     }
 
     $dropdownEl = $dropdownMenuEl = $cloneEl = cloneEl = $backdropEl = null;
@@ -133,18 +164,24 @@ angular.module('ez.dropdown', [])
 
 .directive('dropdown', [function() {
   return {
-    restrict: 'C',
-    controller: 'DropdownCtrl',
+    restrict: 'EA',
+    controller: 'EzDropdownCtrl',
     scope: {
       isOpen: '=?',
       clickInside: '=?',
+      clickEvent: '=?',
       onToggle: '=?',
+      toggleFn: '=?',
+      absolute: '=?'
     },
-    compile: function(el) {
-      var $dropdownMenuEl = el.find('.dropdown-menu').remove();
+    compile: function($el, attrs) {
+      var $menu = $el.children().last().remove();
 
-      return function(scope, el, attrs, ctrl) {
-        ctrl.init(el, $dropdownMenuEl, attrs);
+      $el.addClass('dropdown');
+      $menu.addClass('dropdown-menu');
+
+      return function(scope, $el, attrs, ctrl) {
+        ctrl.init($el, $menu, attrs);
       };
     }
   };
@@ -152,14 +189,18 @@ angular.module('ez.dropdown', [])
 
 .directive('dropdownToggle', [function() {
   return {
-    restrict: 'C',
+    restrict: 'EA',
     require: '^dropdown',
-    link: function(scope, el, attrs, ctrl) {
-      el.on('click', function(e) {
-        ctrl.toggle();
+    link: function(scope, $el, attrs, ctrl) {
+      $el.addClass('dropdown-toggle');
+
+      $el.on('click', function(e) {
+        ctrl.toggle(e);
+
         scope.$apply();
       });
     }
   };
 }]);
+
 
