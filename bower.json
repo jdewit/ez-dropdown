@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "jquery": "*",
-    "angular": "1.2.*"
+    "angular": "1.2.*",
+    "ez-collapse": "~0.0.1"
   }
 }

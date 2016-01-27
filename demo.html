@@ -5,6 +5,7 @@
   <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <!--dependencies start -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
   <link href="dist/ez-dropdown.min.css" rel="stylesheet"/>
 
@@ -13,24 +14,130 @@
   <!--dependencies end -->
 
   <script src="src/ez-dropdown.js"></script>
+  <script src="dist/ez-dropdown-tpl.js"></script>
+  <script src="//rawgithub.com/jdewit/ez-collapse/master/dist/ez-collapse.min.js"></script>
+  <script src="//rawgithub.com/jdewit/ez-transition/master/dist/ez-transition.min.js"></script>
 
   <script>
-    angular.module('myApp', ['ez.dropdown'])
+    angular.module('myApp', ['ez.dropdown', 'ez.collapse'])
 
     .controller('AppCtrl', ['$scope', function AppCtrl($scope) {
 
       $scope.items = [
         {
-          name: 'First Item',
-          links: ['1A', '1B']
+          id: 'first_item',
+          icon: 'fa fa-circle',
+          href: 'http://google.com?q=1A',
+          items: [
+            {
+              id: '1A',
+              icon: 'fa fa-circle',
+              href: 'http://google.com?q=1A'
+            }, {
+              id: '1B',
+              icon: 'fa fa-circle',
+              href: 'http://google.com?q=1B'
+            }, {
+              id: '1C',
+              icon: 'fa fa-circle',
+              href: 'http://google.com?q=1C'
+            }, {
+              id: '1D',
+              icon: 'fa fa-circle',
+              href: 'http://google.com?q=1D'
+            }, {
+              id: '1E',
+              icon: 'fa fa-circle',
+              href: 'http://google.com?q=1E'
+            }, {
+              id: '1F',
+              icon: 'fa fa-circle',
+              href: 'http://google.com?q=1F'
+            }, {
+              id: '1G',
+              icon: 'fa fa-circle',
+              href: 'http://google.com?q=1G'
+            }, {
+              id: '1H',
+              icon: 'fa fa-circle',
+              href: 'http://google.com?q=1H'
+            }
+          ]
         }, {
-          name: 'Second Item',
-          links: ['2A', '2B']
+          id: 'second_item',
+          icon: 'fa fa-check',
+          items: [
+            {
+              id: '2A',
+              icon: 'fa fa-check',
+              href: 'http://google.com?q=2A'
+            }, {
+              id: '2B',
+              icon: 'fa fa-check',
+              href: 'http://google.com?q=2B'
+            }
+          ]
         }, {
-          name: 'Third Item',
-          links: ['3A', '3B']
+          id: 'Third Item',
+          icon: 'fa fa-star',
+          items: [
+            {
+              id: '3A',
+              icon: 'fa fa-star',
+              href: 'http://google.com?q=3A'
+            }, {
+              id: '3B',
+              icon: 'fa fa-star',
+              href: 'http://google.com?q=3B'
+            }
+          ]
+        }, {
+          id: 'fourth_item',
+          icon: 'fa fa-check',
+          items: [
+            {
+              id: '4A',
+              icon: 'fa fa-check',
+              href: 'http://google.com?q=4A'
+            }, {
+              id: '4B',
+              icon: 'fa fa-check',
+              href: 'http://google.com?q=4B'
+            }
+          ]
+        }, {
+          id: 'fifth_item',
+          icon: 'fa fa-star',
+          items: [
+            {
+              id: '5A',
+              icon: 'fa fa-star',
+              href: 'http://google.com?q=5A'
+            }, {
+              id: '5B',
+              icon: 'fa fa-star',
+              href: 'http://google.com?q=5B'
+            }
+          ]
         }
       ];
+
+      $scope.menu = {
+        activeItemId: '4B',
+        items: $scope.items
+      };
+
+      $scope.items2 = angular.copy($scope.items);
+      $scope.menu2 = {
+        activeItem: $scope.items2[0].items[1],
+        items: $scope.items2
+      };
+
+      $scope.menuConfig = {
+        getNameFn: function(item) {
+          return item.id;
+        }
+      };
 
       $scope.toggled = function(open) {
         $scope.msgs.push('call on-toggle => ' + open);
@@ -38,27 +145,23 @@
 
       $scope.msgs = [];
 
-      $scope.inputDropdown = false;
       $scope.log = function(msg) {
         console.log(msg);
         $scope.msgs.push(msg);
-        $scope.inputDropdown = false;
       };
-
-      $scope.dropdownEnabled = true;
 
     }])
 ;
 
   </script>
 </head>
-<body ng-app="myApp">
+<body ng-app="myApp" style="margin-bottom: 200px;">
   <div ng-controller="AppCtrl" class="container-fluid">
     <div class="page-header">
       <h1>ez-dropdown</h1>
     </div>
     <div class="page-body">
-      <span dropdown select="true" on-toggle="toggled">
+      <span dropdown on-toggle="toggled">
         <a dropdown-toggle>
           Dropdown that closes on click inside!
         </a>
@@ -91,7 +194,7 @@
         <a dropdown-toggle>
           Dropdown that stays open on click inside with pointer!??
         </a>
-        <ul class="dropdown-pointer pull-right">
+        <ul dropdown-menu class="dropdown-pointer pull-right">
           <li><a ng-click="log('hey dude')">Hey dude</a></li>
           <li><a ng-click="log('hey dudette')">Hey dudette</a></li>
         </ul>
@@ -104,7 +207,7 @@
           <label class="control-label">Input Toggle</label>
           <input readonly="true" type="text" ng-model="iText" class="form-control"/>
         </div>
-        <ul class="dropdown-pointer pull-right">
+        <ul dropdown-menu class="dropdown-pointer pull-right">
           <li><a ng-click="iText = 'hey dude'">Hey dude</a></li>
           <li><a ng-click="iText = 'hey dudette'">Hey dudette</a></li>
         </ul>
@@ -115,13 +218,13 @@
       <p>Inside ng-repeat</p>
 
       <ul>
-        <li ng-repeat="item in items">
+        <li ng-repeat="item in items track by $index">
           <div dropdown>
             <a dropdown-toggle>
-              {{ item.name }} <span class="caret"></span>
+              {{ item.id }} <span class="caret"></span>
             </a>
-            <ul>
-              <li ng-repeat="link in item.links"><a ng-click="log(link)">{{ link }}</a></li>
+            <ul dropdown-menu>
+              <li ng-repeat="link in item.items"><a ng-click="log(link)">{{ link.id }}</a></li>
             </ul>
           </div>
         </li>
@@ -131,7 +234,7 @@
 
       <div dropdown is-open="foo" click-inside="true">
         <a dropdown-toggle>Dropdown with click inside & custom close</a>
-        <div style="padding: 10px;">
+        <div dropdown-menu style="padding: 10px;">
           <input type="text" class="form-control"/>
           <hr>
           <a ng-click="foo = !foo" class="btn btn-primary">Save</a>
@@ -144,7 +247,7 @@
       <br>
 
       <div dropdown is-open="openDropdown" class="dropup">
-        <ul>
+        <ul dropdown-menu>
           <li>
             <a ng-click="log('hey dude')">Hey dude</a>
             <a class="pull-right">
@@ -166,12 +269,38 @@
 
       <div dropdown absolute="true">
         <a dropdown-toggle>Absolute Dropdown (moves dropdown to body tag)</a>
-        <ul>
+        <ul dropdown-menu>
           <li><a ng-click="log('hey dude')">Hey dude</a></li>
           <li><a ng-click="log('hey dudette')">Hey dudette</a></li>
         </ul>
       </div>
 
+      <hr>
+
+      <h3>Dynamic dropdown menu items</h3>
+      <div dropdown menu="menu" ez-config="menuConfig">
+        <a dropdown-toggle>
+          <i class="{{ menu.activeItem.icon }}"></i>
+          {{ menu.activeItem.id }}
+          <span class="caret"></span>
+        </a>
+      </div>
+
+      <hr>
+
+      <p>No drilldown on desktop</p>
+      <div dropdown menu="menu2" drilldown-enabled="false" ez-config="menuConfig">
+        <a dropdown-toggle>
+          <i class="{{ menu2.activeItem.icon }}"></i>
+          {{ menu2.activeItem.id }}
+          <span class="caret"></span>
+        </a>
+      </div>
+
+      <br>
+      <br>
+      <br>
+      <br>
       <hr>
 
       <h4>Log</h4>

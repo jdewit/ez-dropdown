@@ -32,6 +32,25 @@ module.exports = function(grunt) {
         },
       }
     },
+		ngtemplates: {
+		  dev: {
+        src:      'src/*.html',
+        dest:     'dist/ez-dropdown-tpl.js',
+        options: {
+          module: 'ez.dropdown',
+          url: function(url) { return url.replace('src/', ''); },
+          htmlmin: {
+            collapseBooleanAttributes:      true,
+            collapseWhitespace:             true,
+            removeComments:                 true,
+            removeEmptyAttributes:          true,
+            removeRedundantAttributes:      true,
+            removeScriptTypeAttributes:     true,
+            removeStyleLinkTypeAttributes:  true
+          }
+        }
+		  }
+		},
     uglify: {
       dist: {
         files: {
@@ -52,8 +71,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-less');
+  grunt.loadNpmTasks('grunt-angular-templates');
   grunt.loadNpmTasks('grunt-bump');
 
-  grunt.registerTask('default', ['jshint', 'uglify', 'less']);
+  grunt.registerTask('default', ['jshint', 'uglify', 'less', 'ngtemplates']);
 
 };

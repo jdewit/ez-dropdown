@@ -1,3 +1,11 @@
+body.mobile-modal-open {
+  overflow: hidden;
+}
+
+.modal-backdrop {
+  height: 2000px;
+}
+
 .dropdown {
    position: relative;
 
@@ -6,8 +14,11 @@
   }
 
   .dropdown-menu {
+    margin: 0;
+
     a {
       cursor: pointer;
+      display: block;
     }
 
     a.pull-right {
@@ -15,6 +26,53 @@
       right: 0px;
       top: 0px;
       padding: 3px 5px;
+    }
+  }
+
+  ul.dropdown-drilldown-menu {
+    list-style: none;
+
+    > li {
+
+      > a {
+        font-weight: bold;
+      }
+
+      &.open {
+        > a {
+          background: #eee;
+          /*border: 1px solid #ccc;*/
+        }
+
+        > ul {
+          padding: 5px 0 5px 0;
+
+          > li {
+            border-left: 4px solid transparent;
+            padding-left: 30px;
+
+            &.active {
+              border-color: #2e6da4;
+
+              > a {
+                text-decoration: none;
+              }
+            }
+
+            &:hover {
+              background-color: #eee;
+            }
+          }
+
+          a {
+            text-decoration: none;
+            padding: 5px 0;
+            color: #333;
+          }
+        }
+      }
+
+
     }
   }
 
@@ -73,23 +131,12 @@
     .dropdown-menu {
       position: fixed;
       left: 20px;
+      top: 20px;
       overflow-y: auto;
       z-index: 1041;
 
       a {
         padding: 15px;
-      }
-
-      li {
-        position: relative;
-        border-bottom: 1px solid #eee;
-      }
-
-      input {
-        position: absolute;
-        right: 20px;
-        top: 15px;
-        border-bottom: 1px solid #eee;
       }
     }
 
@@ -100,3 +147,4 @@
     }
   }
 }
+
