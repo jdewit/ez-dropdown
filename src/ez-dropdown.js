@@ -159,9 +159,6 @@ angular.module('ez.dropdown', [])
       for (var i = 0, l = $scope.menu.items.length; i < l; i++) {
         if ($scope.menu.items[i].hasOwnProperty('conditional')) {
           if (typeof $scope.menu.items[i].conditional !== 'boolean') {
-            console.log($scope.$parent.user);
-            console.log($scope.menu.items[i].conditional);
-            console.log($scope.$parent.$eval($scope.menu.items[i].conditional));
             $scope.menu.items[i].conditional = $scope.$parent.$eval($scope.menu.items[i].conditional);
           }
         } else {
@@ -353,6 +350,10 @@ angular.module('ez.dropdown', [])
     };
 
     $scope.select = function(item, isSub) {
+      if (item === $scope.menu.activeItem) {
+        return;
+      }
+
       if (isSub) {
         item.active = !item.active;
 
