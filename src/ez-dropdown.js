@@ -156,37 +156,39 @@ angular.module('ez.dropdown', [])
         $scope.menu.activeItem = null;
       }
 
-      for (var i = 0, l = $scope.menu.items.length; i < l; i++) {
-        if ($scope.menu.items[i].hasOwnProperty('conditional')) {
-          if (typeof $scope.menu.items[i].conditional !== 'boolean') {
-            $scope.menu.items[i].conditional = $scope.$parent.$eval($scope.menu.items[i].conditional);
-          }
-        } else {
-          $scope.menu.items[i].conditional = true;
-        }
-
-        if ($scope.menu.items[i].id === $scope.menu.activeItemId) {
-          $scope.menu.activeItem = $scope.menu.items[i];
-          $scope.menu.activeItem.active = true;
-        }
-
-        if (!!$scope.menu.items[i].items) {
-          for (var j = 0, k = $scope.menu.items[i].items.length; j < k; j++) {
-            $scope.menu.items[i].items[j].parent = $scope.menu.items[i];
-
-            if ($scope.menu.items[i].items[j].hasOwnProperty('conditional')) {
-              if (typeof $scope.menu.items[i].items[j].conditional !== 'boolean') {
-                $scope.menu.items[i].items[j].conditional = $scope.$parent.$eval($scope.menu.items[i].items[j].conditional);
-              }
-            } else {
-              $scope.menu.items[i].items[j].conditional = true;
+      if (!!$scope.menu.items) {
+        for (var i = 0, l = $scope.menu.items.length; i < l; i++) {
+          if ($scope.menu.items[i].hasOwnProperty('conditional')) {
+            if (typeof $scope.menu.items[i].conditional !== 'boolean') {
+              $scope.menu.items[i].conditional = $scope.$parent.$eval($scope.menu.items[i].conditional);
             }
+          } else {
+            $scope.menu.items[i].conditional = true;
+          }
 
-            if ($scope.menu.items[i].items[j].id === $scope.menu.activeItemId) {
-              $scope.menu.activeItem = $scope.menu.items[i].items[j];
-              $scope.menu.openItem = $scope.menu.activeItem.parent;
-              $scope.menu.activeItem.active = true;
-              $scope.menu.openItem.open = true;
+          if ($scope.menu.items[i].id === $scope.menu.activeItemId) {
+            $scope.menu.activeItem = $scope.menu.items[i];
+            $scope.menu.activeItem.active = true;
+          }
+
+          if (!!$scope.menu.items[i].items) {
+            for (var j = 0, k = $scope.menu.items[i].items.length; j < k; j++) {
+              $scope.menu.items[i].items[j].parent = $scope.menu.items[i];
+
+              if ($scope.menu.items[i].items[j].hasOwnProperty('conditional')) {
+                if (typeof $scope.menu.items[i].items[j].conditional !== 'boolean') {
+                  $scope.menu.items[i].items[j].conditional = $scope.$parent.$eval($scope.menu.items[i].items[j].conditional);
+                }
+              } else {
+                $scope.menu.items[i].items[j].conditional = true;
+              }
+
+              if ($scope.menu.items[i].items[j].id === $scope.menu.activeItemId) {
+                $scope.menu.activeItem = $scope.menu.items[i].items[j];
+                $scope.menu.openItem = $scope.menu.activeItem.parent;
+                $scope.menu.activeItem.active = true;
+                $scope.menu.openItem.open = true;
+              }
             }
           }
         }
@@ -344,9 +346,7 @@ angular.module('ez.dropdown', [])
 
       resolveMenuVariables();
 
-      if (isDynamic && (!!$scope.menu.activeItemId || !!$scope.menu.activeItem)) {
-        setInitialItem();
-      }
+      setInitialItem();
     };
 
     $scope.select = function(item, isSub) {
@@ -399,15 +399,14 @@ angular.module('ez.dropdown', [])
           $timeout(function() {
             $scope.isOpen = false;
 
-            if (item.href.indexOf('#') !== -1) {
-              $location.path(item.href.replace('#', ''));
-            } else {
-              window.location.href = item.href;
-            }
+            window.location.href = item.href;
+
 
           }, 400);
         }
       }
+
+      $scope.$emit('ez-dropdown.selected', item);
 
       if (typeof $scope.onSelect === 'function') {
         $scope.onSelect($scope.menu.activeItem, $scope.menu.openItem);
