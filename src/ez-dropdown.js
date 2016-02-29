@@ -399,7 +399,12 @@ angular.module('ez.dropdown', [])
           $timeout(function() {
             $scope.isOpen = false;
 
-            $location.path(item.href);
+            if (item.href.indexOf('#') !== -1) {
+              $location.path(item.href.replace('#', ''));
+            } else {
+              window.location.href = item.href;
+            }
+
           }, 400);
         }
       }
