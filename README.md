@@ -31,9 +31,9 @@ angular.module('yourApp', ['ez.dropdown'])
 ###Usage
 
 ```html
- <span class="dropdown">
-   <a class="dropdown-toggle">Dropdown that closes on click</a>
-   <ul class="dropdown-menu">
+ <span dropdown>
+   <a dropdown-toggle>Dropdown that closes on click</a>
+   <ul dropdown-menu>
      <li><a href="#">Hey</a></li>
    </ul>
  </span>
